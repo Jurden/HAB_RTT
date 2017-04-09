@@ -14,17 +14,17 @@ void useInterrupt(boolean);
 void gps_init()
 {
 	// 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
-  	GPS.begin(9600);
+  GPS.begin(9600);
 
 	// uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
-  	GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-  	// Set the update rate
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  // Set the update rate
 	GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
 	// Request updates on antenna status, comment out to keep quiet
-  	GPS.sendCommand(PGCMD_ANTENNA);
+  GPS.sendCommand(PGCMD_ANTENNA);
 
-  	useInterrupt(true);
-  	delay(1000);
+  useInterrupt(true);
+  delay(1000);
 }
 
 // Interrupt is called once a millisecond, looks for any new GPS data, and stores it
