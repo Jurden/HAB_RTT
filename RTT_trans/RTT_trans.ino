@@ -14,6 +14,7 @@ void loop()
 {
   double temperature;
   int err;
+  char gps;
 
   err = getTempF(&temperature);
   if (err) {
@@ -22,4 +23,11 @@ void loop()
     Serial.println(temperature);
     
   }
+  err = getGPS(&gps);
+  if (!err) {
+    Serial.println(gps);
+  }
+
+  delay(1000);
+  
 }

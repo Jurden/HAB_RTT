@@ -10,6 +10,7 @@ Adafruit_GPS GPS(&mySerial);
 boolean usingInterrupt = true;
 void useInterrupt(boolean);
 
+
 void gps_init()
 {
 	// 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
@@ -53,7 +54,15 @@ void useInterrupt(boolean v) {
 }
 uint32_t timer = millis();
 
-void getGPS()
+int getGPS(char *c)
 {
-	
+  // if a sentence is received, we can check the checksum, parse it...
+  if (GPS.fix) {
+	  *c = GPS.read();
+    Serial.println(GPS.fix);
+    return 0;
+  } else {
+    Serial.println("No Fix");
+    return 3;
+  }
 }
