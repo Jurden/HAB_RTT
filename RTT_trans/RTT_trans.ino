@@ -3,6 +3,9 @@
 
 #define SERIALBAUD  115200
 
+
+// Structures
+// GPS data
 typedef struct GPS_t {
   int hour;
   int minute;
@@ -18,19 +21,16 @@ typedef struct GPS_t {
   double alt;
   int check;
 } GPS_t;
-
+// Pressure + Altimeter data
 typedef struct BMP_t {
   double altitude;
   double pressure;
 } BMP_t;
-
+//
 typedef struct data_t {
   double temperature;
-  BMP_t bmp;
-  GPS_t gps;
 } data_t;
 
-void printdata(data_t *data);
 
 void setup()
 {
@@ -107,3 +107,4 @@ void loop()
   delay(1000);
   
 }
+
