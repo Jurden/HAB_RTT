@@ -7,7 +7,7 @@ Adafruit_GPS GPS(&mySerial);
 
 #define GPSECHO  false
 
-boolean usingInterrupt = true;
+boolean usingInterrupt = false;
 void useInterrupt(boolean);
 
 
@@ -18,9 +18,15 @@ void gps_init()
 
 	// uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  
   // Set the update rate
 	GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
-	// Request updates on antenna status, comment out to keep quiet
+	//GPS.sendCommand(PMTK_API_SET_FIX_CTL_1HZ);
+	// 5 Hz update rate- for 9600 baud you'll have to set the output to RMC or RMCGGA only (see above)
+  //GPS.sendCommand(PMTK_SET_NMEA_UPDATE_5HZ);
+  //GPS.sendCommand(PMTK_API_SET_FIX_CTL_5HZ);
+  
+  // Request updates on antenna status, comment out to keep quiet
   GPS.sendCommand(PGCMD_ANTENNA);
 
   useInterrupt(true);
@@ -54,15 +60,37 @@ void useInterrupt(boolean v) {
 }
 uint32_t timer = millis();
 
-int getGPS(char *c)
+int getGPS(GPS_t *c)
 {
   // if a sentence is received, we can check the checksum, parse it...
-  if (GPS.fix) {
-	  *c = GPS.read();
-    Serial.println(GPS.fix);
+  if (GPS.newNMEAreceived()) {
+    if (!GPS.parse(GPS.lastNMEA())) {
+      return -1;
+    }
+    // Time data
+    c->hour = GPS.hour;
+    c->minute = GPS.minute;
+    c->seconds = GPS.seconds;
+    c->day = GPS.day;
+    c->month = GPS.month;
+    c->year = GPS.year;
+
+    // Check for gps fix
+    if (!GPS.fix) {
+  	  Serial.println("NO FIX");
+      Serial.println(GPS.fix);
+      return -1;
+    }
+
+    // Location data
+    c->lat = GPS.latitude;
+    c->lon = GPS.longitude;
+    c->latDeg = GPS.latitudeDegrees;
+    c->lonDeg = GPS.longitudeDegrees;
+    c->alt = GPS.altitude;
+  
     return 0;
   } else {
-    Serial.println("No Fix");
-    return 3;
+    return -1;
   }
 }
