@@ -2,7 +2,7 @@
 #include <SoftwareSerial.h>
 
 #define SERIALBAUD  115200
-
+#define IGNORE_BMP_ALT true
 
 // Structures
 // GPS data
@@ -20,6 +20,7 @@ typedef struct GPS_t {
   double lonDeg;
   double alt;
   int check;
+  int err;
 } GPS_t;
 // Pressure + Altimeter data
 typedef struct BMP_t {
@@ -63,8 +64,8 @@ void loop()
     Serial.println(data.temperature);  
   } 
   // Get GPS data
-  err = getGPS(&gps);
-  if (!err) {
+  gps.err = getGPS(&gps);
+  if (!gps.err) {
     Serial.print(gps.hour);
     Serial.print(":");
     Serial.print(gps.minute);
@@ -88,7 +89,8 @@ void loop()
       Serial.print("GPS Alt : ");
       Serial.println(gps.alt);
     }
-  } else if (err == -1) {
+  // -1 For no GPS message received
+  } else if (gps.err == -1) {
     Serial.println("GPS ERROR");
   }
   // Get pressure
@@ -97,12 +99,14 @@ void loop()
     Serial.print("Pressure : ");
     Serial.println(bmp.pressure);
   }
-  if (!gps.alt) {  
+  if ((gps.err) && (!IGNORE_BMP_ALT)) {  
     // Get Altitude
     err = getAltitude(&bmp.altitude);
     if (!err) {
       Serial.print("BMP Alt : ");
       Serial.println(bmp.altitude);
+    } else {
+      Serial.println("NO ALT");
     }
   }
   Serial.println();

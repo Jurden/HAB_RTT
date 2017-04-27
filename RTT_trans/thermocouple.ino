@@ -3,10 +3,10 @@
 #include <SPI.h>
 #include "Adafruit_MAX31855.h"
 
-// Arduino pins
-#define MAXDO 	12
-#define MAXCS 	10
-#define MAXCLK	13
+// Feather pins
+#define MAXDO 	14
+#define MAXCS 	6
+#define MAXCLK	15
 
 #define READATTEMPTS	3
 
