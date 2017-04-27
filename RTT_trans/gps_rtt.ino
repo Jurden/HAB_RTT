@@ -2,8 +2,8 @@
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial mySerial(3, 2);
-Adafruit_GPS GPS(&mySerial);
+//SoftwareSerial mySerial(1, 0);
+Adafruit_GPS GPS(&Serial1);
 
 #define GPSECHO  false
 
@@ -15,6 +15,7 @@ void gps_init()
 {
 	// 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);
+  
 
 	// uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
@@ -65,7 +66,7 @@ int getGPS(GPS_t *c)
   // if a sentence is received, we can check the checksum, parse it...
   if (GPS.newNMEAreceived()) {
     if (!GPS.parse(GPS.lastNMEA())) {
-      return -1;
+      return -2;
     }
     // Time data
     c->hour = GPS.hour;
