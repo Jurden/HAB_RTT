@@ -88,6 +88,8 @@ void loop()
       Serial.print("GPS Alt : ");
       Serial.println(gps.alt);
     }
+  } else {
+    Serial.println("GPS ERROR");
   }
   // Get pressure
   err = getPressure(&bmp.pressure);

@@ -91,6 +91,7 @@ int getGPS(GPS_t *c)
   
     return 0;
   } else {
+    Serial.print("NO MESSAGE --");
     return -1;
   }
 }
