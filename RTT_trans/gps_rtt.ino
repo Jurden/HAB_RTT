@@ -79,8 +79,7 @@ int getGPS(GPS_t *c)
     // Check for gps fix
     if (!GPS.fix) {
   	  Serial.println("NO FIX");
-      Serial.println(GPS.fix);
-      return -1;
+      return -3;
     }
 
     // Location data

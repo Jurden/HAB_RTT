@@ -22,11 +22,13 @@ typedef struct GPS_t {
   int check;
   int err;
 } GPS_t;
+
 // Pressure + Altimeter data
 typedef struct BMP_t {
   double altitude;
   double pressure;
 } BMP_t;
+
 //
 typedef struct data_t {
   double temperature;
